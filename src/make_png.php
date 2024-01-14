@@ -20,8 +20,8 @@ class Draw {
     }
     
     public function akt_preis(int $cent): void {
-        $this->text('aktueller Preis:', 20, 10, 40);
-        $this->text($cent . ' ct', 60, 10, 120);
+        $this->text('aktueller Preis:', 20, 40, 80);
+        $this->text($cent . ' ct', 60, 240, 80);
     }
 
     public function preise_heute(array $liste): void {
@@ -46,14 +46,29 @@ class Draw {
             $this->balken($x, $height, $hour, $ct);
             $x+= $nutzbreite;
         }
+
+        // Legende..
+        $this->label(120, '40');
+        $this->label(120 + 130, '25');
+        $this->label(120 + 300, '-5');
     }
 
     private function balken(int $x, int $height, int $hour, int $preis_ct): void {
         $y = 120;
+        $y_hoehe = 300;
         $balken_breite = 10;
-        imagefilledrectangle($this->image, $x, $y, $x + $balken_breite, $y + $height , $this->black);
+        imagefilledrectangle($this->image, $x, $y + ($y_hoehe - $height), $x + $balken_breite, $y + $y_hoehe , $this->black);
         $this->text($hour, 10, $x, $y + 300 + 20);
         $this->text($preis_ct, 10, $x, $y + 300 + 40);
+        if ((int)date('H') === $hour) {
+            imagerectangle($this->image,  $x - 7, $y + 300 + 5, $x + 20, $y + 300 + 45, $this->black);
+        }
+    }
+
+    private function label(int $y, string $text) {
+        imagesetstyle($this->image, [$this->white, $this->black]);
+        imageline($this->image, 40, $y, 750, $y, IMG_COLOR_STYLED);
+        $this->text($text, 10, 10, $y + 5);
     }
 
     private function text(string $text, int $size, int $x, int $y): void {
