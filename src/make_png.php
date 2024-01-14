@@ -35,38 +35,40 @@ class Draw {
         // Graph-Höhe 300
         $max_height = 300;
         $max_preis = 40;
-        $min_height = 0;
-        $min_preis = -5;
-        $preis_spread = $max_preis - $min_preis;
-        for ($hour = 0; $hour < 24; $hour++) {
-            $ct = round($liste[$hour] * 100); // ct
-            $ct_rel= $ct + $min_preis;
-            $ct_rel_max = $max_preis + $min_preis;
-            $height = round($ct_rel / $ct_rel_max * $max_height);
-            $this->balken($x, $height, $hour, $ct);
-            $x+= $nutzbreite;
-        }
 
         // Legende..
-        $this->label(120, '40');
-        $this->label(120 + 130, '25');
-        $this->label(120 + 300, '-5');
+        $label_preis = [40, 35, 30, 25, 20, 15, 10, 5, 0];
+        foreach ($label_preis as $l) {
+            $diff = intval(($max_preis - $l) / $max_preis * $max_height);
+            $this->label(120 + $diff, '' . $l);
+        }
+
+        // Balken ausgeben
+        for ($hour = 0; $hour < 24; $hour++) {
+            $preis = round($liste[$hour] * 100); // ct
+            $height = round($preis / $max_preis * $max_height);
+            $this->balken($x, $height, $hour, $preis);
+            $x+= $nutzbreite;
+        }
     }
 
-    private function balken(int $x, int $height, int $hour, int $preis_ct): void {
+    private function balken(int $x, int $height, int $hour, int $preis): void {
         $y = 120;
         $y_hoehe = 300;
         $balken_breite = 10;
         imagefilledrectangle($this->image, $x, $y + ($y_hoehe - $height), $x + $balken_breite, $y + $y_hoehe , $this->black);
         $this->text($hour, 10, $x, $y + 300 + 20);
-        $this->text($preis_ct, 10, $x, $y + 300 + 40);
+        $this->text($preis, 10, $x, $y + 300 + 40);
         if ((int)date('H') === $hour) {
             imagerectangle($this->image,  $x - 7, $y + 300 + 5, $x + 20, $y + 300 + 45, $this->black);
         }
     }
 
     private function label(int $y, string $text) {
-        imagesetstyle($this->image, [$this->white, $this->black]);
+        imagesetstyle($this->image, [
+            $this->black,$this->black, $this->black, $this->black,$this->black,
+            $this->white,$this->white,$this->white,$this->white,$this->white
+        ]);
         imageline($this->image, 40, $y, 750, $y, IMG_COLOR_STYLED);
         $this->text($text, 10, 10, $y + 5);
     }
