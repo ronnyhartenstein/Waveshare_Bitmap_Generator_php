@@ -10,7 +10,8 @@
 
 und Script ausführen ..
 
-`docker run -it -v ./src:/src -w /src waveshare-bitmap-generator-php php make_png.php`
+`docker run -it -v ./src:/src -v /tmp:/tmp_host -w /src waveshare-bitmap-generator-php php make_png.php /tmp_host/tibber_daten.json /tmp_host/tibber_output.png 
+`
 
 
 # Daten von Tibber via NodeRED
@@ -18,5 +19,5 @@ und Script ausführen ..
 
 
 # Convert PNG zu BMP
-`docker run -it -v ./src:/src -w /src waveshare-bitmap-generator-php convert output.png -monochrome output.bmp`
+`docker run -it -v ./src:/src -v /tmp:/tmp_host -w /src waveshare-bitmap-generator-php convert /tmp_host/tibber_output.png -monochrome /tmp_host/tibber_output.bmp`
 
