@@ -4,7 +4,6 @@ class Draw {
     private const WIDTH = 800;
     private const HEIGHT = 480;
     private const FONT = __DIR__.'/roboto.ttf';
-    private const OUT = __DIR__.'/output.png';
 
     private GdImage $image;
     private int $black;
@@ -78,14 +77,19 @@ class Draw {
         imagettftext($this->image, $size, 0, $x, $y, $this->black, self::FONT, $text);
     }
     
-    public function save(): void {
-        imagepng($this->image, self::OUT);    
+    public function save(string $datei): void {
+        imagepng($this->image, $datei);    
         imagedestroy($this->image);    
     }
 }
 
-$daten = json_decode(file_get_contents(__DIR__.'/daten.json'), true);
+$json_datei = $argv[1];
+$output_png = $argv[2];
+if (empty($json_datei) || empty($output_png)) {
+    print "Aufruf: make_png.php /tmp/daten.json /tmp/output.png\n";
+}
+$daten = json_decode(file_get_contents($json_datei), true);
 $draw = new Draw();
 $draw->akt_preis($daten['current']);
 $draw->preise_heute($daten['today']);
-$draw->save();
+$draw->save($output_png);

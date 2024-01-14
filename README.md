@@ -18,5 +18,5 @@ und Script ausführen ..
 
 
 # Convert PNG zu BMP
-`docker run -it -v ./src:/src -w /src waveshare-bitmap-generator-php convert output.png -monochrome output.png.bmp``
-`
+`docker run -it -v ./src:/src -w /src waveshare-bitmap-generator-php convert output.png -monochrome output.bmp`
+
