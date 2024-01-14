@@ -1,37 +1,41 @@
 <?php
-function createPNG($text, $filename) {
-    // Image dimensions
-    $width = 200;
-    $height = 100;
+function createPNG(array $daten) {    
+    $width = 800;
+    $height = 480;
 
-    // Create a blank image
     $image = imagecreatetruecolor($width, $height);
 
-    // Define colors
+    
     $black = imagecolorallocate($image, 0, 0, 0);
     $white = imagecolorallocate($image, 255, 255, 255);
 
-    // Fill the image with white background
     imagefilledrectangle($image, 0, 0, $width, $height, $white);
+    imagerectangle($image, 0, 0, $width-1, $height-1, $black);
 
-    // Set font settings
-    $font = 4;  // Adjust as needed
-    $x = 10;    // X-coordinate of the text
-    $y = 40;    // Y-coordinate of the text
+    
+    $font = __DIR__.'/roboto.ttf';  
 
-    // Add black text to the image
-    imagestring($image, $font, $x, $y, $text, $black);
+    $size = 20;
+    $x = 10;
+    $y = 40;
+    $text = 'aktueller Preis:';
 
-    // Save the image as PNG
-    imagepng($image, $filename);
+    imagettftext($image, $size, 0, $x, $y, $black, $font, $text);
 
-    // Free up memory
+
+    $size = 60;
+    $x = 10;
+    $y = 100;
+    $text = $daten['current'] . ' ct';
+                // size, angle, x, y, color, font, text
+    imagettftext($image, $size, 0, $x, $y, $black, $font, $text);
+
+    
+    imagepng($image, 'output.png');
+
+    
     imagedestroy($image);
 }
 
-// Usage
-$text = "Hello, PNG!";
-$filename = "output.png";
-createPNG($text, $filename);
-echo "PNG file created: $filename";
-?>
+$daten = json_decode(file_get_contents(__DIR__.'/daten.json'), true);
+createPNG($daten);
