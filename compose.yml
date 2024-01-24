@@ -1,0 +1,9 @@
+
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - ./src:/src
+      - /tmp:/tmp_host
+    working_dir: /src

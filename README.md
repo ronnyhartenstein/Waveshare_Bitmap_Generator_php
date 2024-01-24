@@ -4,14 +4,9 @@
 3. ImageMagick konvertiert zu monochrome BMP
 
 
-# Docker Image bauen
+# Laufen lassen
 
-`docker build -t waveshare-bitmap-generator-php .`
-
-und Script ausführen ..
-
-`docker run -it -v ./src:/src -v /tmp:/tmp_host -w /src waveshare-bitmap-generator-php php make_png.php /tmp_host/tibber_daten.json /tmp_host/tibber_output.png 
-`
+`docker compose run app php make_png.php /tmp_host/tibber_daten.json /tmp_host/tibber_output.png`
 
 
 # Daten von Tibber via NodeRED
@@ -19,5 +14,5 @@ und Script ausführen ..
 
 
 # Convert PNG zu BMP
-`docker run -it -v ./src:/src -v /tmp:/tmp_host -w /src waveshare-bitmap-generator-php convert /tmp_host/tibber_output.png -monochrome /tmp_host/tibber_output.bmp`
+`docker compose run app convert /tmp_host/tibber_output.png -monochrome /tmp_host/tibber_output.bmp`
 
